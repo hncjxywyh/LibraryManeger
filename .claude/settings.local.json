@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git config *)",
+      "Bash(git --version)",
+      "Bash(env -i HOME=/mingw64 PATH=/mingw64/bin:/usr/bin git commit -m \"feat: 创建实体类和通用响应\")",
+      "Bash(git -C \"d:/workspaceForTrae/LibraryManager\" add library-server/src/main/java/com/library/security/ library-server/src/main/java/com/library/config/)",
+      "Bash(git -C \"d:/workspaceForTrae/LibraryManager\" commit -m \"feat: 实现JWT认证过滤器\")",
+      "Bash(git -C \"d:/workspaceForTrae/LibraryManager\" commit --message=\"feat: 实现JWT认证过滤器\")",
+      "Bash(git -C \"d:/workspaceForTrae/LibraryManager\" status)",
+      "Bash(cmd.exe /c \"cd /d d:\\\\workspaceForTrae\\\\LibraryManager && git commit -m \\\\\"feat: 实现JWT认证过滤器\\\\\"\")",
+      "Bash(git -C d:/workspaceForTrae/LibraryManager commit -m 'feat: 实现JWT认证过滤器')",
+      "Bash(bash d:/workspaceForTrae/LibraryManager/commit.sh)",
+      "Bash(git -C d:/workspaceForTrae/LibraryManager log -1 --oneline)",
+      "Bash(where git *)",
+      "Bash(/mingw64/bin/git add *)",
+      "Bash(/mingw64/bin/git commit *)",
+      "Bash(git -C /d/workspaceForTrae/LibraryManager status)",
+      "Bash(git -C /d/workspaceForTrae/LibraryManager commit -m \"feat: 实现用户注册和登录接口\")",
+      "Bash(sh -c \"git commit -m 'feat: 实现用户注册和登录接口'\")",
+      "Bash(cmd.exe /c \"cd /d D:\\\\workspaceForTrae\\\\LibraryManager && git commit -m feat: 实现用户注册和登录接口\")",
+      "Bash(env GIT_TERMINAL_PROMPT=0 git commit -m \"feat: 实现用户注册和登录接口\")"
+    ]
+  }
+}
