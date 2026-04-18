@@ -7,7 +7,7 @@
         <el-button type="success" @click="handleAdd">新增分类</el-button>
       </div>
 
-      <el-table :data="categories" v-loading="loading" style="width: 100%; margin-top: 20px" row-key="id">
+      <el-table :data="categories" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)" row-key="id">
         <el-table-column prop="name" label="分类名称" />
         <el-table-column prop="sort" label="排序" width="100" />
         <el-table-column label="操作" width="150">
@@ -117,8 +117,33 @@ onMounted(() => {
 
 <style scoped>
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.categories-container :deep(.el-card) {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+.categories-container :deep(.el-table th) {
+  background-color: var(--color-content-bg) !important;
   font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.categories-container :deep(.el-table td) {
+  border-bottom-color: var(--color-border-light);
+}
+
+.categories-container :deep(.el-button) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.categories-container :deep(.el-button:hover) {
+  opacity: 0.85;
 }
 </style>

@@ -52,16 +52,32 @@ const handleCommand = (command) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--color-navbar-bg);
+  padding: 0 var(--spacing-lg);
 }
 
 .username {
-  color: #333;
-  font-size: 14px;
+  color: var(--color-text-primary);
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .user-dropdown {
   display: flex;
   align-items: center;
   cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.user-dropdown:hover {
+  background: var(--color-border-light);
+}
+
+.user-dropdown :deep(.el-avatar) {
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
 }
 </style>

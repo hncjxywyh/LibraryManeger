@@ -6,7 +6,9 @@ import com.library.common.Constants;
 import com.library.dto.BookRequest;
 import com.library.dto.PageRequest;
 import com.library.entity.Book;
+import com.library.entity.BorrowRecord;
 import com.library.mapper.BookMapper;
+import com.library.mapper.BorrowRecordMapper;
 import com.library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
+    private final BorrowRecordMapper borrowRecordMapper;
 
     @Override
     public Page<Book> getBooks(PageRequest request) {
@@ -91,6 +94,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(Long id) {
+        LambdaQueryWrapper<BorrowRecord> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(BorrowRecord::getBookId, id)
+                .in(BorrowRecord::getStatus, Constants.BORROW_STATUS_BORROWING, Constants.BORROW_STATUS_OVERDUE);
+        long count = borrowRecordMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new RuntimeException("图书被借阅中，无法删除");
+        }
         bookMapper.deleteById(id);
     }
 }

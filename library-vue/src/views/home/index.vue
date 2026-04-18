@@ -6,7 +6,7 @@
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card">
           <div class="stat-content">
-            <div class="stat-icon" style="background: #409EFF">
+            <div class="stat-icon" style="background: var(--color-primary)">
               <el-icon :size="30"><Reading /></el-icon>
             </div>
             <div class="stat-info">
@@ -19,7 +19,7 @@
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card">
           <div class="stat-content">
-            <div class="stat-icon" style="background: #67C23A">
+            <div class="stat-icon" style="background: var(--color-success)">
               <el-icon :size="30"><List /></el-icon>
             </div>
             <div class="stat-info">
@@ -32,7 +32,7 @@
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card">
           <div class="stat-content">
-            <div class="stat-icon" style="background: #E6A23C">
+            <div class="stat-icon" style="background: var(--color-warning)">
               <el-icon :size="30"><User /></el-icon>
             </div>
             <div class="stat-info">
@@ -45,7 +45,7 @@
       <el-col :span="6">
         <el-card shadow="hover" class="stat-card">
           <div class="stat-content">
-            <div class="stat-icon" style="background: #F56C6C">
+            <div class="stat-icon" style="background: var(--color-danger)">
               <el-icon :size="30"><Warning /></el-icon>
             </div>
             <div class="stat-info">
@@ -140,33 +140,44 @@ onMounted(async () => {
 
 <style scoped>
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
 .stats-row {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .stat-card {
-  padding: 10px;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  border: 1px solid var(--color-border-light);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
 }
 
 .stat-content {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--spacing-lg);
 }
 
 .stat-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--border-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
+  flex-shrink: 0;
 }
 
 .stat-info {
@@ -175,20 +186,41 @@ onMounted(async () => {
 
 .stat-value {
   font-size: 28px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--color-text-primary);
   margin: 0;
+  line-height: 1.2;
 }
 
 .stat-label {
   font-size: 14px;
-  color: #999;
-  margin: 0;
+  color: var(--color-text-secondary);
+  margin: 6px 0 0 0;
+  font-weight: 500;
 }
 
 .quick-actions {
   display: flex;
-  gap: 10px;
+  gap: var(--spacing-md);
   flex-wrap: wrap;
+}
+
+.quick-actions .el-button {
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.quick-actions .el-button:hover {
+  transform: translateY(-1px);
+}
+
+.home-container :deep(.el-card__header) {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+  font-weight: 600;
+}
+
+.home-container :deep(.el-card__body) {
+  padding: var(--spacing-lg);
 }
 </style>

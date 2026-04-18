@@ -33,5 +33,6 @@ export const user = {
   list: (params) => request.get('/users', { params }),
   detail: (id) => request.get(`/users/${id}`),
   update: (id, data) => request.put(`/users/${id}`, data),
+  changePassword: (id, data) => request.put(`/users/${id}/password`, data),
   delete: (id) => request.delete(`/users/${id}`)
 }

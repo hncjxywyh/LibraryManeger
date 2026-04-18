@@ -17,7 +17,7 @@
         </el-select>
       </div>
 
-      <el-table :data="borrows" v-loading="loading" style="width: 100%; margin-top: 20px">
+      <el-table :data="borrows" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)">
         <el-table-column prop="bookTitle" label="书名" min-width="150" />
         <el-table-column prop="userRealName" label="读者" width="100" v-if="userStore.isAdmin" />
         <el-table-column prop="borrowDate" label="借书日期" width="160" />
@@ -133,8 +133,33 @@ onMounted(() => {
 
 <style scoped>
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.borrows-container :deep(.el-card) {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+.borrows-container :deep(.el-table th) {
+  background-color: var(--color-content-bg) !important;
   font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.borrows-container :deep(.el-table td) {
+  border-bottom-color: var(--color-border-light);
+}
+
+.borrows-container :deep(.el-button) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.borrows-container :deep(.el-button:hover) {
+  opacity: 0.85;
 }
 </style>

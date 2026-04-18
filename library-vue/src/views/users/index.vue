@@ -3,7 +3,7 @@
     <h1 class="page-title">读者管理</h1>
 
     <el-card>
-      <el-table :data="users" v-loading="loading" style="width: 100%; margin-top: 20px">
+      <el-table :data="users" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)">
         <el-table-column prop="username" label="用户名" />
         <el-table-column prop="realName" label="真实姓名" />
         <el-table-column prop="phone" label="手机号" />
@@ -44,7 +44,7 @@ const loadUsers = async () => {
   loading.value = true
   try {
     const res = await user.list()
-    users.value = res.data
+    users.value = res.data.records
   } catch (error) {
     console.error(error)
   } finally {
@@ -70,8 +70,33 @@ onMounted(() => {
 
 <style scoped>
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.users-container :deep(.el-card) {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+.users-container :deep(.el-table th) {
+  background-color: var(--color-content-bg) !important;
   font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.users-container :deep(.el-table td) {
+  border-bottom-color: var(--color-border-light);
+}
+
+.users-container :deep(.el-button) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.users-container :deep(.el-button:hover) {
+  opacity: 0.85;
 }
 </style>

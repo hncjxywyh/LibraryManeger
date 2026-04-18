@@ -26,21 +26,23 @@ public class BorrowController {
     }
 
     @PostMapping
-    public Result<Void> borrowBook(@RequestBody BorrowRequest request, HttpServletRequest httpRequest) {
+    public Result<String> borrowBook(@RequestBody BorrowRequest request, HttpServletRequest httpRequest) {
         Long userId = (Long) httpRequest.getAttribute("userId");
         borrowService.borrowBook(request, userId);
         return Result.success("借书成功");
     }
 
     @PutMapping("/{id}/return")
-    public Result<Void> returnBook(@PathVariable Long id) {
-        borrowService.returnBook(id);
+    public Result<String> returnBook(@PathVariable Long id, HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        borrowService.returnBook(id, userId);
         return Result.success("还书成功");
     }
 
     @PutMapping("/{id}/renew")
-    public Result<Void> renewBook(@PathVariable Long id) {
-        borrowService.renewBook(id);
+    public Result<String> renewBook(@PathVariable Long id, HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        borrowService.renewBook(id, userId);
         return Result.success("续借成功");
     }
 }

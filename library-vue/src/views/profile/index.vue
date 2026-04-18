@@ -27,6 +27,9 @@
         <span>修改密码</span>
       </template>
       <el-form ref="passwordFormRef" :model="passwordForm" :rules="passwordRules" label-width="100px">
+        <el-form-item label="原密码" prop="oldPassword">
+          <el-input v-model="passwordForm.oldPassword" type="password" />
+        </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
           <el-input v-model="passwordForm.newPassword" type="password" />
         </el-form-item>
@@ -41,6 +44,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { user as userApi } from '@/api'
 import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
@@ -56,10 +60,12 @@ const form = reactive({
 })
 
 const passwordForm = reactive({
+  oldPassword: '',
   newPassword: ''
 })
 
 const passwordRules = {
+  oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
   newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }]
 }
 
@@ -67,12 +73,36 @@ onMounted(() => {
   Object.assign(form, userStore.userInfo)
 })
 
-const handleUpdate = () => {
-  ElMessage.success('功能待开发')
+const handleUpdate = async () => {
+  try {
+    await userApi.update(userStore.userInfo.id, {
+      realName: form.realName,
+      phone: form.phone,
+      email: form.email
+    })
+    userStore.userInfo.realName = form.realName
+    userStore.userInfo.phone = form.phone
+    userStore.userInfo.email = form.email
+    localStorage.setItem('userInfo', JSON.stringify(userStore.userInfo))
+    ElMessage.success('修改成功')
+  } catch (error) {
+    // error already handled by interceptor
+  }
 }
 
-const handleChangePassword = () => {
-  ElMessage.success('功能待开发')
+const handleChangePassword = async () => {
+  try {
+    await passwordFormRef.value.validate()
+    await userApi.changePassword(userStore.userInfo.id, {
+      oldPassword: passwordForm.oldPassword,
+      newPassword: passwordForm.newPassword
+    })
+    passwordForm.oldPassword = ''
+    passwordForm.newPassword = ''
+    ElMessage.success('密码修改成功')
+  } catch (error) {
+    // validation error or API error handled by interceptor
+  }
 }
 </script>
 
@@ -82,8 +112,44 @@ const handleChangePassword = () => {
 }
 
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.profile-container :deep(.el-card) {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border-light);
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-container :deep(.el-card__header) {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
   font-weight: 600;
+}
+
+.profile-container :deep(.el-card__body) {
+  padding: var(--spacing-lg);
+}
+
+.profile-container :deep(.el-input__wrapper) {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+.profile-container :deep(.el-input__wrapper:hover),
+.profile-container :deep(.el-input__wrapper.is-focus) {
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-container :deep(.el-button) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.profile-container :deep(.el-button:hover) {
+  opacity: 0.85;
 }
 </style>

@@ -69,8 +69,9 @@ CREATE TABLE borrow_record (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='借阅记录表';
 
 -- 初始化管理员账号 (密码: admin123)
+-- BCrypt hash for 'admin123'
 INSERT INTO sys_user (username, password, real_name, role, status) VALUES
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH', '系统管理员', 1, 1);
+('admin', '$2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', '系统管理员', 1, 1);
 
 -- 初始化图书分类
 INSERT INTO book_category (name, parent_id, sort) VALUES

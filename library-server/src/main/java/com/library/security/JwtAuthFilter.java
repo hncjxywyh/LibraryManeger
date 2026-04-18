@@ -32,13 +32,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = extractToken(request);
 
-        String[] allowedPaths = {"/api/auth/login", "/api/auth/register", "/api/books"};
+        String[] allowedPaths = {"/api/auth/login", "/api/auth/register"};
         String path = request.getRequestURI();
+        String method = request.getMethod();
+        boolean isPublicGetBook = "GET".equals(method) && path.startsWith("/api/books");
         for (String allowedPath : allowedPaths) {
             if (path.startsWith(allowedPath)) {
                 filterChain.doFilter(request, response);
                 return;
             }
+        }
+        if (isPublicGetBook) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         if (!StringUtils.hasText(token) || !jwtUtil.validateToken(token)) {

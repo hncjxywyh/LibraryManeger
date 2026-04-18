@@ -21,7 +21,9 @@
       "Bash(git -C /d/workspaceForTrae/LibraryManager commit -m \"feat: 实现用户注册和登录接口\")",
       "Bash(sh -c \"git commit -m 'feat: 实现用户注册和登录接口'\")",
       "Bash(cmd.exe /c \"cd /d D:\\\\workspaceForTrae\\\\LibraryManager && git commit -m feat: 实现用户注册和登录接口\")",
-      "Bash(env GIT_TERMINAL_PROMPT=0 git commit -m \"feat: 实现用户注册和登录接口\")"
+      "Bash(env GIT_TERMINAL_PROMPT=0 git commit -m \"feat: 实现用户注册和登录接口\")",
+      "Bash(git -C \"d:\\\\workspaceForTrae\\\\LibraryManager\" add library-vue/)",
+      "Bash(git -C \"d:\\\\workspaceForTrae\\\\LibraryManager\" commit -m \"feat: 创建Vue 3项目骨架\")"
     ]
   }
 }

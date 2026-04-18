@@ -30,9 +30,8 @@ public class BorrowServiceImpl implements BorrowService {
 
         LambdaQueryWrapper<BorrowRecord> wrapper = new LambdaQueryWrapper<>();
 
-        if (role != null && role.equals(Constants.ROLE_USER)) {
-            wrapper.eq(BorrowRecord::getUserId, userId);
-        }
+        // 所有用户都只能看到自己的借阅记录
+        wrapper.eq(BorrowRecord::getUserId, userId);
 
         if (StringUtils.hasText(request.getKeyword())) {
             wrapper.eq(BorrowRecord::getStatus, request.getKeyword());
@@ -86,10 +85,13 @@ public class BorrowServiceImpl implements BorrowService {
 
     @Override
     @Transactional
-    public void returnBook(Long id) {
+    public void returnBook(Long id, Long userId) {
         BorrowRecord record = borrowRecordMapper.selectById(id);
         if (record == null) {
             throw new RuntimeException("借阅记录不存在");
+        }
+        if (!record.getUserId().equals(userId)) {
+            throw new RuntimeException("无权操作此借阅记录");
         }
         if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)) {
             throw new RuntimeException("该图书已归还");
@@ -107,10 +109,13 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
-    public void renewBook(Long id) {
+    public void renewBook(Long id, Long userId) {
         BorrowRecord record = borrowRecordMapper.selectById(id);
         if (record == null) {
             throw new RuntimeException("借阅记录不存在");
+        }
+        if (!record.getUserId().equals(userId)) {
+            throw new RuntimeException("无权操作此借阅记录");
         }
         if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)) {
             throw new RuntimeException("该图书已归还，无法续借");

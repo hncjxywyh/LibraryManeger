@@ -38,7 +38,7 @@
         </el-button>
       </div>
 
-      <el-table :data="books" v-loading="loading" style="width: 100%; margin-top: 20px">
+      <el-table :data="books" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)">
         <el-table-column prop="title" label="书名" min-width="150" />
         <el-table-column prop="author" label="作者" width="120" />
         <el-table-column prop="isbn" label="ISBN" width="150" />
@@ -284,13 +284,58 @@ onMounted(() => {
 
 <style scoped>
 .page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
+  margin-bottom: var(--spacing-lg);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
 .search-bar {
   display: flex;
   align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.search-bar :deep(.el-input__wrapper) {
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-xs);
+}
+
+.search-bar :deep(.el-input__wrapper:hover),
+.search-bar :deep(.el-input__wrapper.is-focus) {
+  box-shadow: var(--shadow-sm);
+}
+
+.books-container :deep(.el-card) {
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+.books-container :deep(.el-table) {
+  border-radius: var(--border-radius-md);
+}
+
+.books-container :deep(.el-table th) {
+  background-color: var(--color-content-bg) !important;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.books-container :deep(.el-table td) {
+  border-bottom-color: var(--color-border-light);
+}
+
+.books-container :deep(.el-button) {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.books-container :deep(.el-button:hover) {
+  opacity: 0.85;
+}
+
+.books-container :deep(.el-pagination) {
+  padding: var(--spacing-md) 0;
 }
 </style>

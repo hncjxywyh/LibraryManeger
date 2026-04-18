@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/library?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: 1234
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -22,5 +22,5 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 jwt:
-  secret: library-jwt-secret-key-2024
+  secret: library-jwt-secret-key-2024-library-management-system-secret-key
   expiration: 604800000

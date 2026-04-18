@@ -8,6 +8,6 @@ import com.library.entity.BorrowRecord;
 public interface BorrowService {
     Page<BorrowRecord> getBorrowRecords(PageRequest request, Long userId, Integer role);
     void borrowBook(BorrowRequest request, Long userId);
-    void returnBook(Long id);
-    void renewBook(Long id);
+    void returnBook(Long id, Long userId);
+    void renewBook(Long id, Long userId);
 }

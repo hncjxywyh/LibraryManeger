@@ -25,21 +25,22 @@ import Navbar from './Navbar.vue'
 }
 
 .sidebar {
-  background: #304156;
+  background: var(--color-sidebar-bg);
   overflow-x: hidden;
 }
 
 .navbar {
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  background: var(--color-navbar-bg);
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .main-content {
-  background: #f5f7fa;
-  padding: 20px;
+  background: var(--color-content-bg);
+  padding: var(--spacing-lg);
   overflow-y: auto;
 }
 </style>

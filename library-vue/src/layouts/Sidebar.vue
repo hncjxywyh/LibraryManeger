@@ -5,10 +5,11 @@
     </div>
     <el-menu
       :default-active="activeMenu"
-      background-color="#304156"
-      text-color="#bfcbd9"
-      active-text-color="#409EFF"
+      background-color="var(--color-sidebar-bg)"
+      text-color="var(--color-sidebar-text)"
+      active-text-color="var(--color-sidebar-active)"
       :router="true"
+      class="sidebar-menu"
     >
       <el-menu-item index="/home">
         <el-icon><HomeFilled /></el-icon>
@@ -57,23 +58,53 @@ const activeMenu = computed(() => route.path)
 <style scoped>
 .sidebar-container {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
-  height: 60px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2b3a4a;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
 
 .logo h2 {
   color: #fff;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-.el-menu {
+.sidebar-menu {
   border: none;
+  flex: 1;
+}
+
+.sidebar-menu :deep(.el-menu-item) {
+  height: 50px;
+  line-height: 50px;
+  margin: 4px 12px;
+  padding-left: 16px !important;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
+  cursor: pointer;
+}
+
+.sidebar-menu :deep(.el-menu-item:hover) {
+  background-color: var(--color-sidebar-hover) !important;
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active) {
+  background-color: var(--color-primary) !important;
+  color: #fff !important;
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active) .el-icon {
+  color: #fff;
 }
 </style>
