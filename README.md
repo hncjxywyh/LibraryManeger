@@ -73,6 +73,25 @@ LibraryManager/
 - 修改个人资料（姓名、电话、邮箱）
 - 修改登录密码
 
+### 预约管理
+- 库存不足时支持预约排队
+- 优先级队列（按预约时间排序）
+- 还书自动通知下一位预约者
+- 预约有效期7天，过期自动失效
+- 支持取书、取消预约
+
+### 滞纳金管理
+- 阶梯式滞纳金计算：
+  - 1-7天：0.2元/天
+  - 8-14天：0.5元/天
+  - 15天以上：1.0元/天
+- 还书时自动计算并记录滞纳金
+
+### 图书捐赠
+- 用户提交捐赠意向（姓名、联系方式、图书信息）
+- 管理员审核捐赠申请
+- 审核通过后自动入库，标记为"捐赠"来源
+
 ## 角色权限
 
 系统内置两种角色：
@@ -129,6 +148,23 @@ LibraryManager/
 | PUT | /api/users/{id} | 更新用户信息（本人或管理员） |
 | PUT | /api/users/{id}/password | 修改密码（本人或管理员） |
 
+### 预约 `/api/reservations`
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/reservations | 获取我的预约列表 |
+| POST | /api/reservations/{bookId} | 创建预约 |
+| DELETE | /api/reservations/{id} | 取消预约 |
+| POST | /api/reservations/{id}/pickup | 取书 |
+| GET | /api/reservations/book/{bookId} | 获取图书预约队列（管理员） |
+
+### 捐赠 `/api/donations`
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | /api/donations | 获取我的捐赠记录 |
+| POST | /api/donations | 提交捐赠意向 |
+| GET | /api/donations/all | 获取所有捐赠列表（管理员） |
+| PUT | /api/donations/{id} | 审核捐赠（管理员） |
+
 ## 数据库模型
 
 ### sys_user（用户表）
@@ -148,10 +184,24 @@ id, name, parent_id, sort, create_time, update_time
 
 ### borrow_record（借阅记录表）
 ```
-id, book_id, user_id, borrow_date, due_date, return_date, status, create_time, update_time
+id, book_id, user_id, borrow_date, due_date, return_date, status, create_time, update_time, overdue_fee
 ```
 
 - `status`: 1=借阅中, 2=已归还, 3=逾期
+
+### book_reservation（预约表）
+```
+id, book_id, user_id, status, position, notify_time, expire_time, create_time
+```
+
+- `status`: 1=排队中, 2=已通知, 3=已取消, 4=已失效
+
+### book_donation（捐赠表）
+```
+id, donor_name, donor_phone, donor_message, book_title, book_author, book_publisher, quantity, status, review_comment, review_time, user_id, create_time
+```
+
+- `status`: 1=待审核, 2=已通过, 3=已拒绝
 
 ## 快速开始
 
@@ -167,6 +217,12 @@ mysql -u root -p < library-server/src/main/resources/sql/init.sql
 ```
 
 确保 MySQL 中已创建 `library` 数据库。
+
+> **注意**：如果使用增量功能（预约、捐赠、滞纳金），需要额外执行数据库升级脚本：
+>
+> ```bash
+> mysql -u root -p library < library-server/src/main/resources/sql/upgrade_booking_donation.sql
+> ```
 
 ### 2. 启动后端
 
