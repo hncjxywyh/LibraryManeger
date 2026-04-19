@@ -5,9 +5,13 @@ import com.library.dto.BorrowRequest;
 import com.library.dto.PageRequest;
 import com.library.entity.BorrowRecord;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public interface BorrowService {
     Page<BorrowRecord> getBorrowRecords(PageRequest request, Long userId, Integer role);
     void borrowBook(BorrowRequest request, Long userId);
     void returnBook(Long id, Long userId);
     void renewBook(Long id, Long userId);
+    BigDecimal calculateOverdueFee(LocalDateTime dueDate);
 }

@@ -2,6 +2,7 @@ package com.library.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -30,4 +31,10 @@ public class BorrowRecord {
 
     @TableField(exist = false)
     private String userRealName;
+
+    private Integer remindSent; // 是否已发送到期提醒 0=未发 1=已发
+
+    private Integer overdueRemindCount; // 逾期提醒次数
+
+    private BigDecimal overdueFee; // 滞纳金
 }

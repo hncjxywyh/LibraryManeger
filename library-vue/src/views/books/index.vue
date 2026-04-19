@@ -54,7 +54,8 @@
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="handleDetail(row)">详情</el-button>
-            <el-button link type="success" @click="handleBorrow(row)" v-if="!userStore.isAdmin">借书</el-button>
+            <el-button link type="success" @click="handleBorrow(row)" v-if="!userStore.isAdmin && row.stock > 0">借书</el-button>
+            <el-button link type="warning" @click="handleReserve(row)" v-if="!userStore.isAdmin && row.stock <= 0">预约</el-button>
             <el-button link type="primary" v-if="userStore.isAdmin" @click="handleEdit(row)">编辑</el-button>
             <el-button link type="danger" v-if="userStore.isAdmin" @click="handleDelete(row)">删除</el-button>
           </template>
@@ -87,6 +88,9 @@
         <el-button @click="detailVisible = false">关闭</el-button>
         <el-button type="primary" @click="handleBorrow(currentBook)" v-if="!userStore.isAdmin && currentBook?.stock > 0">
           借书
+        </el-button>
+        <el-button type="warning" @click="handleReserve(currentBook)" v-if="!userStore.isAdmin && currentBook?.stock <= 0">
+          预约此书
         </el-button>
       </template>
     </el-dialog>
@@ -137,6 +141,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { book, category, borrow } from '@/api'
+import { createReservation } from '@/api/reservations'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const userStore = useUserStore()
@@ -223,6 +228,20 @@ const handleBorrow = async (row) => {
     await ElMessageBox.confirm(`确定要借阅《${row.title}》吗？`, '提示')
     await borrow.borrow({ bookId: row.id })
     ElMessage.success('借书成功')
+    detailVisible.value = false
+    loadBooks()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error(error)
+    }
+  }
+}
+
+const handleReserve = async (row) => {
+  try {
+    await ElMessageBox.confirm(`确定要预约《${row.title}》吗？图书到货后会通知您`, '提示')
+    await createReservation(row.id)
+    ElMessage.success('预约成功')
     detailVisible.value = false
     loadBooks()
   } catch (error) {

@@ -4,6 +4,11 @@
       <span class="username">欢迎，{{ userStore.userInfo.realName || userStore.userInfo.username }}</span>
     </div>
     <div class="right">
+      <el-badge :value="userStore.unreadMessageCount" :hidden="userStore.unreadMessageCount === 0" :max="99">
+        <el-icon :size="22" style="margin-right: 20px; cursor: pointer" @click="$router.push('/messages')">
+          <Bell />
+        </el-icon>
+      </el-badge>
       <el-dropdown @command="handleCommand">
         <span class="user-dropdown">
           <el-avatar :size="32" style="margin-right: 8px">
@@ -23,12 +28,20 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessageBox } from 'element-plus'
+import { Bell, ArrowDown } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+
+onMounted(() => {
+  if (userStore.token) {
+    userStore.fetchUnreadMessageCount()
+  }
+})
 
 const handleCommand = (command) => {
   if (command === 'logout') {

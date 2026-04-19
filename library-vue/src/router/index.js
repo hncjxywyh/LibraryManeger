@@ -53,6 +53,30 @@ const routes = [
         name: 'Profile',
         component: () => import('@/views/profile/index.vue'),
         meta: { title: '个人中心' }
+      },
+      {
+        path: '/messages',
+        name: 'Messages',
+        component: () => import('@/views/messages/index.vue'),
+        meta: { title: '我的消息' }
+      },
+      {
+        path: '/reservations',
+        name: 'Reservations',
+        component: () => import('@/views/reservations/index.vue'),
+        meta: { title: '我的预约' }
+      },
+      {
+        path: '/donations',
+        name: 'Donations',
+        component: () => import('@/views/donations/index.vue'),
+        meta: { title: '图书捐赠' }
+      },
+      {
+        path: '/admin/donations',
+        name: 'AdminDonations',
+        component: () => import('@/views/admin/donations.vue'),
+        meta: { title: '捐赠审核', requiresAdmin: true }
       }
     ]
   }

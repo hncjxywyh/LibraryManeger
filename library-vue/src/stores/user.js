@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { auth } from '@/api'
+import { auth, message as messageApi } from '@/api'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     token: localStorage.getItem('token') || '',
-    userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}')
+    userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
+    unreadMessageCount: 0
   }),
 
   getters: {
@@ -33,8 +34,20 @@ export const useUserStore = defineStore('user', {
     logout() {
       this.token = ''
       this.userInfo = {}
+      this.unreadMessageCount = 0
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')
+    },
+
+    async fetchUnreadMessageCount() {
+      if (!this.token) return 0
+      try {
+        const res = await messageApi.getUnreadCount()
+        this.unreadMessageCount = res.data || 0
+        return this.unreadMessageCount
+      } catch (e) {
+        return 0
+      }
     }
   }
 })

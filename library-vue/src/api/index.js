@@ -36,3 +36,14 @@ export const user = {
   changePassword: (id, data) => request.put(`/users/${id}/password`, data),
   delete: (id) => request.delete(`/users/${id}`)
 }
+
+export const message = {
+  list: (params) => request.get('/messages', { params }),
+  getUnreadCount: () => request.get('/messages/unread-count'),
+  markRead: (id) => request.put(`/messages/${id}/read`),
+  markAllRead: () => request.put('/messages/read-all')
+}
+
+export const userStats = {
+  get: () => request.get('/user-stats')
+}

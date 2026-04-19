@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -23,6 +25,7 @@ public class BorrowServiceImpl implements BorrowService {
 
     private final BorrowRecordMapper borrowRecordMapper;
     private final BookMapper bookMapper;
+    private final com.library.service.ReservationService reservationService;
 
     @Override
     public Page<BorrowRecord> getBorrowRecords(PageRequest request, Long userId, Integer role) {
@@ -97,6 +100,9 @@ public class BorrowServiceImpl implements BorrowService {
             throw new RuntimeException("该图书已归还");
         }
 
+        // 计算滞纳金
+        BigDecimal overdueFee = calculateOverdueFee(record.getDueDate());
+        record.setOverdueFee(overdueFee);
         record.setReturnDate(LocalDateTime.now());
         record.setStatus(Constants.BORROW_STATUS_RETURNED);
         borrowRecordMapper.updateById(record);
@@ -105,6 +111,8 @@ public class BorrowServiceImpl implements BorrowService {
         if (book != null) {
             book.setStock(book.getStock() + 1);
             bookMapper.updateById(book);
+            // 通知下一个预约者
+            reservationService.notifyNextReservation(record.getBookId());
         }
     }
 
@@ -123,5 +131,30 @@ public class BorrowServiceImpl implements BorrowService {
 
         record.setDueDate(record.getDueDate().plusDays(Constants.BORROW_DAYS));
         borrowRecordMapper.updateById(record);
+    }
+
+    @Override
+    public BigDecimal calculateOverdueFee(LocalDateTime dueDate) {
+        long overdueDays = LocalDate.now().toEpochDay() - dueDate.toLocalDate().toEpochDay();
+        if (overdueDays <= 0) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal tier1Rate = new BigDecimal("0.20");
+        BigDecimal tier2Rate = new BigDecimal("0.50");
+        BigDecimal tier3Rate = new BigDecimal("1.00");
+
+        BigDecimal fee;
+        if (overdueDays <= 7) {
+            fee = BigDecimal.valueOf(overdueDays).multiply(tier1Rate);
+        } else if (overdueDays <= 14) {
+            fee = BigDecimal.valueOf(7).multiply(tier1Rate)
+                    .add(BigDecimal.valueOf(overdueDays - 7).multiply(tier2Rate));
+        } else {
+            fee = BigDecimal.valueOf(7).multiply(tier1Rate)
+                    .add(BigDecimal.valueOf(7).multiply(tier2Rate))
+                    .add(BigDecimal.valueOf(overdueDays - 14).multiply(tier3Rate));
+        }
+        return fee;
     }
 }

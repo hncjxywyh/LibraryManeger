@@ -26,6 +26,16 @@
         <span>我的借阅</span>
       </el-menu-item>
 
+      <el-menu-item index="/reservations">
+        <el-icon><Clock /></el-icon>
+        <span>我的预约</span>
+      </el-menu-item>
+
+      <el-menu-item index="/donations">
+        <el-icon><Present /></el-icon>
+        <span>图书捐赠</span>
+      </el-menu-item>
+
       <el-menu-item v-if="userStore.isAdmin" index="/categories">
         <el-icon><FolderOpened /></el-icon>
         <span>分类管理</span>
@@ -34,6 +44,11 @@
       <el-menu-item v-if="userStore.isAdmin" index="/users">
         <el-icon><User /></el-icon>
         <span>读者管理</span>
+      </el-menu-item>
+
+      <el-menu-item v-if="userStore.isAdmin" index="/admin/donations">
+        <el-icon><Tickets /></el-icon>
+        <span>捐赠审核</span>
       </el-menu-item>
 
       <el-menu-item index="/profile">

@@ -31,4 +31,7 @@ public class Book {
 
     @TableField(exist = false)
     private String categoryName;
+
+    private String source; // purchase/donation
+    private Long donorId;
 }
