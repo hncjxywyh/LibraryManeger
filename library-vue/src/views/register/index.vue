@@ -1,48 +1,76 @@
 <template>
   <div class="register-container">
-    <div class="register-box">
-      <h1 class="title">用户注册</h1>
+    <!-- 古典装饰背景 -->
+    <div class="ink-wash-background">
+      <div class="cloud-decoration cloud-1"></div>
+      <div class="cloud-decoration cloud-2"></div>
+    </div>
+
+    <div class="register-box classical-border">
+      <!-- 印章装饰 -->
+      <div class="seal-badge">记</div>
+
+      <div class="title-section">
+        <h1 class="title">加入书阁</h1>
+        <p class="subtitle">开启您的阅读之旅</p>
+      </div>
+
       <el-form ref="formRef" :model="form" :rules="rules" class="register-form">
         <el-form-item prop="username">
-          <el-input
-            v-model="form.username"
-            placeholder="请输入用户名"
-            prefix-icon="User"
-            size="large"
-          />
+          <div class="input-wrapper">
+            <span class="input-icon">用户名</span>
+            <el-input
+              v-model="form.username"
+              placeholder="请输入用户名"
+              size="large"
+              class="classical-input"
+            />
+          </div>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="form.password"
-            type="password"
-            placeholder="请输入密码"
-            prefix-icon="Lock"
-            size="large"
-          />
+          <div class="input-wrapper">
+            <span class="input-icon">密　码</span>
+            <el-input
+              v-model="form.password"
+              type="password"
+              placeholder="请输入密码"
+              size="large"
+              class="classical-input"
+            />
+          </div>
         </el-form-item>
         <el-form-item prop="realName">
-          <el-input
-            v-model="form.realName"
-            placeholder="请输入真实姓名"
-            prefix-icon="UserFilled"
-            size="large"
-          />
+          <div class="input-wrapper">
+            <span class="input-icon">姓　名</span>
+            <el-input
+              v-model="form.realName"
+              placeholder="请输入真实姓名"
+              size="large"
+              class="classical-input"
+            />
+          </div>
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input
-            v-model="form.phone"
-            placeholder="请输入手机号"
-            prefix-icon="Phone"
-            size="large"
-          />
+          <div class="input-wrapper">
+            <span class="input-icon">手　机</span>
+            <el-input
+              v-model="form.phone"
+              placeholder="请输入手机号"
+              size="large"
+              class="classical-input"
+            />
+          </div>
         </el-form-item>
         <el-form-item prop="email">
-          <el-input
-            v-model="form.email"
-            placeholder="请输入邮箱（选填）"
-            prefix-icon="Message"
-            size="large"
-          />
+          <div class="input-wrapper">
+            <span class="input-icon">邮　箱</span>
+            <el-input
+              v-model="form.email"
+              placeholder="请输入邮箱（选填）"
+              size="large"
+              class="classical-input"
+            />
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -52,14 +80,20 @@
             @click="handleRegister"
             class="register-btn"
           >
-            注册
+            加　入
           </el-button>
         </el-form-item>
       </el-form>
+
       <div class="footer">
-        <span>已有账号？</span>
-        <router-link to="/login">立即登录</router-link>
+        <span>已有书卷</span>
+        <router-link to="/login" class="login-link">返回登录</router-link>
       </div>
+    </div>
+
+    <!-- 底部装饰 -->
+    <div class="footer-decoration">
+      <span class="poem">读书破万卷，下笔如有神</span>
     </div>
   </div>
 </template>
@@ -99,6 +133,7 @@ const handleRegister = async () => {
     router.push('/login')
   } catch (error) {
     console.error(error)
+    ElMessage.error(error?.response?.data?.message || '注册失败，请稍后重试')
   } finally {
     loading.value = false
   }
@@ -109,76 +144,204 @@ const handleRegister = async () => {
 .register-container {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(180deg, #FAF6F0 0%, #F5F0E8 50%, #EDE6DC 100%);
   padding: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
 }
 
+/* 水墨背景装饰 */
+.ink-wash-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cloud-decoration {
+  position: absolute;
+  background: radial-gradient(ellipse at center, rgba(139, 69, 19, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cloud-1 {
+  width: 500px;
+  height: 350px;
+  top: -80px;
+  left: -80px;
+}
+
+.cloud-2 {
+  width: 400px;
+  height: 300px;
+  bottom: -60px;
+  right: -60px;
+}
+
+/* 登录框 */
 .register-box {
   width: 100%;
   max-width: 420px;
   padding: var(--spacing-2xl);
-  background: #fff;
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-xl);
+  background: rgba(255, 253, 248, 0.95);
+  position: relative;
+  z-index: 1;
+}
+
+/* 印章装饰 */
+.seal-badge {
+  position: absolute;
+  top: -25px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-success);
+  color: #fff;
+  font-family: var(--font-family-heading);
+  font-size: 22px;
+  border-radius: 4px;
+  transform: rotate(12deg);
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+/* 标题区域 */
+.title-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
 }
 
 .title {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-  color: var(--color-text-primary);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-family: var(--font-family-heading);
+  font-size: 32px;
+  color: var(--color-primary-dark);
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: 6px;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.1);
+}
+
+.subtitle {
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+/* 表单样式 */
+.register-form {
+  margin-top: var(--spacing-lg);
 }
 
 .register-form :deep(.el-form-item) {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
-.register-form :deep(.el-input__wrapper) {
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
+  background: #fff;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-xs);
   transition: all var(--transition-fast);
 }
 
-.register-form :deep(.el-input__wrapper:hover),
-.register-form :deep(.el-input__wrapper.is-focus) {
-  box-shadow: var(--shadow-sm);
+.input-wrapper:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
 }
 
+.input-icon {
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  min-width: 50px;
+  text-align: justify;
+  text-align-last: justify;
+}
+
+.classical-input :deep(.el-input__wrapper) {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+}
+
+.classical-input :deep(.el-input__inner) {
+  font-family: var(--font-family);
+}
+
+/* 注册按钮 */
 .register-btn {
   width: 100%;
   height: 48px;
   font-size: 16px;
-  font-weight: 600;
+  font-family: var(--font-family);
+  letter-spacing: 4px;
   border-radius: var(--border-radius-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  border: none;
   transition: all var(--transition-base);
-  cursor: pointer;
 }
 
 .register-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
 }
 
+/* 底部 */
 .footer {
   text-align: center;
   margin-top: var(--spacing-xl);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-family: var(--font-family);
   font-size: 14px;
   color: var(--color-text-secondary);
 }
 
-.footer a {
+.footer::before,
+.footer::after {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-border), transparent);
+}
+
+.login-link {
   color: var(--color-primary);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   transition: color var(--transition-fast);
 }
 
-.footer a:hover {
+.login-link:hover {
   color: var(--color-primary-dark);
+}
+
+/* 底部诗词装饰 */
+.footer-decoration {
+  position: absolute;
+  bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.poem {
+  font-family: var(--font-family);
+  font-size: 12px;
+  color: var(--color-text-placeholder);
+  letter-spacing: 2px;
 }
 </style>
