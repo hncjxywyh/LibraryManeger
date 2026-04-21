@@ -7,6 +7,7 @@ import com.library.dto.PageRequest;
 import com.library.entity.BorrowRecord;
 import com.library.service.BorrowService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class BorrowController {
     }
 
     @PostMapping
-    public Result<String> borrowBook(@RequestBody BorrowRequest request, HttpServletRequest httpRequest) {
+    public Result<String> borrowBook(@Valid @RequestBody BorrowRequest request, HttpServletRequest httpRequest) {
         Long userId = (Long) httpRequest.getAttribute("userId");
         borrowService.borrowBook(request, userId);
         return Result.success("借书成功");
