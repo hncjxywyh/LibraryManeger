@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = extractToken(request);
 
-        if (jwtBlacklist.contains(token)) {
+        if (token != null && jwtBlacklist.contains(token)) {
             sendUnauthorizedResponse(response, "Token已失效，请重新登录");
             return;
         }
