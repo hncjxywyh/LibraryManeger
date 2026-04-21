@@ -64,15 +64,11 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException("您已借阅此书");
         }
 
-        // 获取当前最大position
-        LambdaQueryWrapper<BookReservation> positionWrapper = new LambdaQueryWrapper<>();
-        positionWrapper.eq(BookReservation::getBookId, bookId)
-                .eq(BookReservation::getStatus, RESERVATION_STATUS_PENDING)
-                .select(BookReservation::getPosition)
-                .orderByDesc(BookReservation::getPosition)
-                .last("LIMIT 1");
-        BookReservation maxPositionReservation = reservationMapper.selectOne(positionWrapper);
-        int nextPosition = (maxPositionReservation == null) ? 1 : maxPositionReservation.getPosition() + 1;
+        // Atomically get next position with FOR UPDATE lock
+        Integer nextPosition = reservationMapper.getNextPositionForUpdate(bookId, RESERVATION_STATUS_PENDING);
+        if (nextPosition == null) {
+            nextPosition = 1;
+        }
 
         // 创建预约记录
         BookReservation reservation = new BookReservation();
