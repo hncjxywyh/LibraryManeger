@@ -79,6 +79,7 @@ public class BorrowServiceImpl implements BorrowService {
         record.setBorrowDate(LocalDateTime.now());
         record.setDueDate(LocalDateTime.now().plusDays(Constants.BORROW_DAYS));
         record.setStatus(Constants.BORROW_STATUS_BORROWING);
+        record.setRenewCount(0);
 
         borrowRecordMapper.insert(record);
 
@@ -127,9 +128,19 @@ public class BorrowServiceImpl implements BorrowService {
             throw new RuntimeException("无权操作此借阅记录");
         }
         if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)) {
-            throw new RuntimeException("该图书已归还，无法续借");
+            throw new RuntimeException("该图书已归还或已逾期，无法续借");
+        }
+        // Prevent renew if already overdue
+        if (record.getDueDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("图书已逾期，请先归还再借");
+        }
+        // Max 2 renewals per record
+        if (record.getRenewCount() != null && record.getRenewCount() >= 2) {
+            throw new RuntimeException("该借阅记录已达到最大续借次数");
         }
 
+        int newCount = (record.getRenewCount() == null) ? 1 : record.getRenewCount() + 1;
+        record.setRenewCount(newCount);
         record.setDueDate(record.getDueDate().plusDays(Constants.BORROW_DAYS));
         borrowRecordMapper.updateById(record);
     }

@@ -37,4 +37,6 @@ public class BorrowRecord {
     private Integer overdueRemindCount; // 逾期提醒次数
 
     private BigDecimal overdueFee; // 滞纳金
+
+    private Integer renewCount; // 续借次数
 }

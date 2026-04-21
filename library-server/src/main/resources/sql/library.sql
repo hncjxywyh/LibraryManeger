@@ -150,6 +150,7 @@ CREATE TABLE `borrow_record`  (
   `remind_sent` tinyint NOT NULL DEFAULT 0 COMMENT '是否已发送到期提醒 0=未发 1=已发',
   `overdue_remind_count` int NOT NULL DEFAULT 0 COMMENT '逾期提醒次数',
   `overdue_fee` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '滞纳金金额',
+  `renew_count` int DEFAULT 0 COMMENT '续借次数',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_book_id`(`book_id` ASC) USING BTREE,
   INDEX `idx_user_id`(`user_id` ASC) USING BTREE,
