@@ -98,7 +98,7 @@ public class BorrowServiceImpl implements BorrowService {
         }
         if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)
             && !record.getStatus().equals(Constants.BORROW_STATUS_OVERDUE)) {
-            throw new RuntimeException("该图书已归还");
+            throw new RuntimeException("该借阅记录无法进行还书操作");
         }
 
         // 计算滞纳金
