@@ -8,4 +8,5 @@ public class PageRequest {
     private Integer pageSize = 10;
     private String keyword;
     private Long categoryId;
+    private Integer status;  // dedicated status filter field
 }

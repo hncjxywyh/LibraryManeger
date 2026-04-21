@@ -36,7 +36,10 @@ public class BorrowServiceImpl implements BorrowService {
         // 所有用户都只能看到自己的借阅记录
         wrapper.eq(BorrowRecord::getUserId, userId);
 
-        if (StringUtils.hasText(request.getKeyword())) {
+        if (request.getStatus() != null) {
+            wrapper.eq(BorrowRecord::getStatus, request.getStatus());
+        } else if (StringUtils.hasText(request.getKeyword())) {
+            // Backward compatibility fallback
             wrapper.eq(BorrowRecord::getStatus, request.getKeyword());
         }
 
