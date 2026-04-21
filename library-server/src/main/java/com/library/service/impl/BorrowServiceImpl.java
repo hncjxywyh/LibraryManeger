@@ -96,7 +96,8 @@ public class BorrowServiceImpl implements BorrowService {
         if (!record.getUserId().equals(userId)) {
             throw new RuntimeException("无权操作此借阅记录");
         }
-        if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)) {
+        if (!record.getStatus().equals(Constants.BORROW_STATUS_BORROWING)
+            && !record.getStatus().equals(Constants.BORROW_STATUS_OVERDUE)) {
             throw new RuntimeException("该图书已归还");
         }
 

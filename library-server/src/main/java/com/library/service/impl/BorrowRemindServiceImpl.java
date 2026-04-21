@@ -103,6 +103,12 @@ public class BorrowRemindServiceImpl implements BorrowRemindService {
 
             // 记录日志
             saveRemindLog(record, Constants.REMIND_TYPE_OVERDUE, (int) overdueDays);
+
+            // Update overdue status
+            LambdaUpdateWrapper<BorrowRecord> statusWrapper = new LambdaUpdateWrapper<>();
+            statusWrapper.eq(BorrowRecord::getId, record.getId())
+                          .set(BorrowRecord::getStatus, Constants.BORROW_STATUS_OVERDUE);
+            borrowRecordMapper.update(null, statusWrapper);
         }
     }
 
