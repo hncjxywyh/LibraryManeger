@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface BookMapper extends BaseMapper<Book> {
 
+    @Select("SELECT * FROM book WHERE id = #{id} FOR UPDATE")
+    Book selectForUpdate(Long id);
+
     @Select("SELECT * FROM book WHERE isbn = #{isbn}")
     Book selectByIsbn(@Param("isbn") String isbn);
 }

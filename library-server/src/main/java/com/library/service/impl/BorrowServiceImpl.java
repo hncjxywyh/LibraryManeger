@@ -57,7 +57,7 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     @Transactional
     public void borrowBook(BorrowRequest request, Long userId) {
-        Book book = bookMapper.selectById(request.getBookId());
+        Book book = bookMapper.selectForUpdate(request.getBookId());
         if (book == null) {
             throw new RuntimeException("图书不存在");
         }
