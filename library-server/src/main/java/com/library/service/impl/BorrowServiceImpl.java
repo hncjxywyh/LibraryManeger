@@ -39,8 +39,12 @@ public class BorrowServiceImpl implements BorrowService {
         if (request.getStatus() != null) {
             wrapper.eq(BorrowRecord::getStatus, request.getStatus());
         } else if (StringUtils.hasText(request.getKeyword())) {
-            // Backward compatibility fallback
-            wrapper.eq(BorrowRecord::getStatus, request.getKeyword());
+            // Backward compatibility fallback - parse keyword to integer
+            try {
+                wrapper.eq(BorrowRecord::getStatus, Integer.parseInt(request.getKeyword()));
+            } catch (NumberFormatException ignored) {
+                // keyword is not a valid status number, skip this filter
+            }
         }
 
         wrapper.orderByDesc(BorrowRecord::getCreateTime);
