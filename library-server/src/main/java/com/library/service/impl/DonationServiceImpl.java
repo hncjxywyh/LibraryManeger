@@ -75,7 +75,7 @@ public class DonationServiceImpl implements DonationService {
             book.setAuthor(donation.getBookAuthor());
             book.setPublisher(donation.getBookPublisher());
             book.setStock(donation.getQuantity());
-            book.setStatus(1);
+            book.setStatus(0);
             book.setSource("donation");
             book.setDonorId(donation.getUserId());
             bookMapper.insert(book);

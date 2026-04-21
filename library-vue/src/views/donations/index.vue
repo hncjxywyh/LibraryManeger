@@ -1,14 +1,18 @@
 <template>
-  <div class="donations-container">
-    <h1 class="page-title">图书捐赠</h1>
+  <div class="donations-container ink-wash-bg">
+    <div class="page-header">
+      <h1 class="page-title">图书捐赠</h1>
+      <div class="title-decoration"></div>
+    </div>
 
-    <el-card class="donation-form-card">
+    <el-card class="donation-form-card content-card">
       <template #header>
         <div class="card-header">
-          <span>捐赠表单</span>
+          <span class="card-title">捐赠表单</span>
+          <div class="header-line"></div>
         </div>
       </template>
-      <el-form ref="donationFormRef" :model="donationForm" :rules="donationRules" label-width="100px">
+      <el-form ref="donationFormRef" :model="donationForm" :rules="donationRules" label-width="100px" class="donation-form">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="捐赠者姓名" prop="donorName">
@@ -49,34 +53,39 @@
           <el-input v-model="donationForm.message" type="textarea" :rows="3" placeholder="请输入留言" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">提交捐赠</el-button>
+          <el-button type="primary" @click="handleSubmit" class="submit-btn">提交捐赠</el-button>
           <el-button @click="handleReset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
 
-    <el-card class="donation-records-card">
+    <el-card class="donation-records-card content-card">
       <template #header>
         <div class="card-header">
-          <span>我的捐赠记录</span>
+          <span class="card-title">我的捐赠记录</span>
+          <div class="header-line"></div>
         </div>
       </template>
-      <el-table :data="donations" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)">
-        <el-table-column prop="bookName" label="图书名称" min-width="150" />
+      <el-table :data="donations" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)" class="classical-table">
+        <el-table-column prop="bookName" label="图书名称" min-width="150">
+          <template #default="{ row }">
+            <span class="book-name-cell">{{ row.bookName }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="author" label="作者" width="120" />
         <el-table-column prop="publisher" label="出版社" width="120" />
-        <el-table-column prop="quantity" label="数量" width="80" />
+        <el-table-column prop="quantity" label="数量" width="70" align="center" />
         <el-table-column prop="createTime" label="提交时间" width="160" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="status" label="状态" width="90" align="center">
           <template #default="{ row }">
-            <el-tag :type="getStatusType(row.status)">
+            <el-tag :type="getStatusType(row.status)" size="small" class="status-tag">
               {{ getStatusText(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="reviewComment" label="审核备注" min-width="150">
           <template #default="{ row }">
-            {{ row.reviewComment || '-' }}
+            <span class="comment-cell">{{ row.reviewComment || '—' }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +96,7 @@
         :total="pagination.total"
         :page-sizes="[10, 20, 50]"
         layout="total, sizes, prev, pager, next"
-        style="margin-top: 20px; justify-content: flex-end"
+        style="margin-top: var(--spacing-lg); justify-content: flex-end"
         @size-change="loadDonations"
         @current-change="loadDonations"
       />
@@ -181,44 +190,106 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-title {
-  margin-bottom: var(--spacing-lg);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text-primary);
+.donations-container {
+  padding: var(--spacing-md);
 }
 
-.donations-container :deep(.el-card) {
+/* 页面标题 */
+.page-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font-family: var(--font-family-heading);
+  font-size: 26px;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: 4px;
+  position: relative;
+  display: inline-block;
+}
+
+.title-decoration {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, var(--color-primary), transparent);
+  margin-top: var(--spacing-sm);
+}
+
+/* 内容卡片 */
+.content-card {
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border-light);
+  background: #fff;
   margin-bottom: var(--spacing-lg);
+}
+
+.content-card :deep(.el-card__header) {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.content-card :deep(.el-card__body) {
+  padding: var(--spacing-lg);
 }
 
 .card-header {
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.card-title {
+  font-family: var(--font-family-heading);
   font-size: 16px;
-}
-
-.donations-container :deep(.el-table th) {
-  background-color: var(--color-content-bg) !important;
-  font-weight: 600;
   color: var(--color-text-primary);
+  letter-spacing: 2px;
 }
 
-.donations-container :deep(.el-table td) {
-  border-bottom-color: var(--color-border-light);
+.header-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-border), transparent);
 }
 
-.donations-container :deep(.el-button) {
-  cursor: pointer;
-  transition: all var(--transition-fast);
+/* 表单样式 */
+.donation-form :deep(.el-form-item__label) {
+  font-family: var(--font-family);
 }
 
-.donations-container :deep(.el-button:hover) {
-  opacity: 0.85;
+.submit-btn {
+  font-family: var(--font-family);
+  letter-spacing: 2px;
 }
 
-.donations-container :deep(.el-pagination) {
-  padding: var(--spacing-md) 0;
+/* 表格样式 */
+.classical-table :deep(.el-table__header th) {
+  background-color: var(--color-primary-bg) !important;
+  font-family: var(--font-family-heading);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  letter-spacing: 1px;
+}
+
+.classical-table :deep(.el-table__row) {
+  transition: background-color var(--transition-fast);
+}
+
+.classical-table :deep(.el-table__row:hover) {
+  background-color: var(--color-primary-bg) !important;
+}
+
+.book-name-cell {
+  font-family: var(--font-family);
+  font-weight: 500;
+}
+
+.comment-cell {
+  font-family: var(--font-family);
+  color: var(--color-text-secondary);
+}
+
+.status-tag {
+  font-family: var(--font-family);
 }
 </style>

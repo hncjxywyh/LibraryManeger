@@ -1,8 +1,17 @@
 <template>
   <div class="sidebar-container">
-    <div class="logo">
-      <h2>图书管理</h2>
+    <!-- 顶部装饰 -->
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <div class="seal-logo">阁</div>
+        <div class="logo-text">
+          <h2>藏书阁</h2>
+          <p>Library</p>
+        </div>
+      </div>
+      <div class="header-decoration"></div>
     </div>
+
     <el-menu
       :default-active="activeMenu"
       background-color="var(--color-sidebar-bg)"
@@ -56,6 +65,12 @@
         <span>个人中心</span>
       </el-menu-item>
     </el-menu>
+
+    <!-- 底部装饰 -->
+    <div class="sidebar-footer">
+      <div class="footer-decoration"></div>
+      <p class="footer-poem">腹有诗书气自华</p>
+    </div>
   </div>
 </template>
 
@@ -75,51 +90,140 @@ const activeMenu = computed(() => route.path)
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--color-sidebar-bg);
+  position: relative;
 }
 
-.logo {
-  height: 64px;
+/* 顶部区域 */
+.sidebar-header {
+  padding: var(--spacing-lg);
+  text-align: center;
+  position: relative;
+}
+
+.logo-area {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
+  gap: var(--spacing-md);
 }
 
-.logo h2 {
+.seal-logo {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-danger);
   color: #fff;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-family: var(--font-family-heading);
+  font-size: 22px;
+  border-radius: 4px;
+  transform: rotate(-5deg);
+  box-shadow: 0 3px 10px rgba(139, 0, 0, 0.3);
 }
 
+.logo-text h2 {
+  color: var(--color-sidebar-text);
+  font-family: var(--font-family-heading);
+  font-size: 20px;
+  margin: 0;
+  letter-spacing: 4px;
+}
+
+.logo-text p {
+  color: var(--color-text-placeholder);
+  font-family: var(--font-family);
+  font-size: 10px;
+  margin: 2px 0 0 0;
+  letter-spacing: 2px;
+}
+
+.header-decoration {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  margin: var(--spacing-md) auto 0;
+  opacity: 0.5;
+}
+
+/* 菜单样式 */
 .sidebar-menu {
   border: none;
   flex: 1;
+  padding: 0 var(--spacing-sm);
 }
 
 .sidebar-menu :deep(.el-menu-item) {
-  height: 50px;
-  line-height: 50px;
-  margin: 4px 12px;
-  padding-left: 16px !important;
+  height: 48px;
+  line-height: 48px;
+  margin: 4px 0;
+  padding-left: var(--spacing-lg) !important;
   border-radius: var(--border-radius-md);
   transition: all var(--transition-fast);
   position: relative;
   cursor: pointer;
+  font-family: var(--font-family);
+  letter-spacing: 1px;
+}
+
+.sidebar-menu :deep(.el-menu-item)::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--color-sidebar-text);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all var(--transition-fast);
 }
 
 .sidebar-menu :deep(.el-menu-item:hover) {
   background-color: var(--color-sidebar-hover) !important;
 }
 
+.sidebar-menu :deep(.el-menu-item:hover)::before {
+  opacity: 0.5;
+}
+
 .sidebar-menu :deep(.el-menu-item.is-active) {
-  background-color: var(--color-primary) !important;
+  background: linear-gradient(90deg, rgba(199, 84, 74, 0.2) 0%, transparent 100%) !important;
+  border-left: 3px solid var(--color-sidebar-active);
+  padding-left: calc(var(--spacing-lg) - 3px) !important;
   color: #fff !important;
 }
 
+.sidebar-menu :deep(.el-menu-item.is-active)::before {
+  background: var(--color-sidebar-active);
+  opacity: 1;
+}
+
 .sidebar-menu :deep(.el-menu-item.is-active) .el-icon {
-  color: #fff;
+  color: var(--color-sidebar-active);
+}
+
+/* 底部装饰 */
+.sidebar-footer {
+  padding: var(--spacing-lg);
+  text-align: center;
+  position: relative;
+}
+
+.footer-decoration {
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(139, 69, 19, 0.3), transparent);
+  margin: 0 auto var(--spacing-md);
+}
+
+.footer-poem {
+  font-family: var(--font-family);
+  font-size: 12px;
+  color: var(--color-text-placeholder);
+  margin: 0;
+  letter-spacing: 2px;
 }
 </style>

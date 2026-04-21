@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 public interface BookService {
-    Page<Book> getBooks(PageRequest request);
+    Page<Book> getBooks(PageRequest request, boolean isAdmin);
     Book getBookById(Long id);
     void addBook(BookRequest request);
     void updateBook(BookRequest request);

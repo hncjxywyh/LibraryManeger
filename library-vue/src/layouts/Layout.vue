@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container">
-    <el-aside width="220px" class="sidebar">
+    <el-aside width="240px" class="sidebar">
       <Sidebar />
     </el-aside>
     <el-container>
@@ -27,11 +27,12 @@ import Navbar from './Navbar.vue'
 .sidebar {
   background: var(--color-sidebar-bg);
   overflow-x: hidden;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .navbar {
   background: var(--color-navbar-bg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   padding: 0 var(--spacing-lg);
@@ -40,7 +41,7 @@ import Navbar from './Navbar.vue'
 
 .main-content {
   background: var(--color-content-bg);
-  padding: var(--spacing-lg);
+  padding: 0;
   overflow-y: auto;
 }
 </style>

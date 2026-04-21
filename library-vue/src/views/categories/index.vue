@@ -1,28 +1,35 @@
 <template>
-  <div class="categories-container">
-    <h1 class="page-title">分类管理</h1>
+  <div class="categories-container ink-wash-bg">
+    <div class="page-header">
+      <h1 class="page-title">分类管理</h1>
+      <div class="title-decoration"></div>
+    </div>
 
-    <el-card>
+    <el-card class="content-card">
       <div class="toolbar">
-        <el-button type="success" @click="handleAdd">新增分类</el-button>
+        <el-button type="success" @click="handleAdd" class="add-btn">新增分类</el-button>
       </div>
 
-      <el-table :data="categories" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)" row-key="id">
-        <el-table-column prop="name" label="分类名称" />
-        <el-table-column prop="sort" label="排序" width="100" />
-        <el-table-column label="操作" width="150">
+      <el-table :data="categories" v-loading="loading" stripe style="width: 100%; margin-top: var(--spacing-lg)" row-key="id" class="classical-table">
+        <el-table-column prop="name" label="分类名称">
           <template #default="{ row }">
-            <el-button link type="primary" @click="handleEdit(row)">编辑</el-button>
-            <el-button link type="danger" @click="handleDelete(row)">删除</el-button>
+            <span class="category-name">{{ row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="sort" label="排序" width="100" align="center" />
+        <el-table-column label="操作" width="150" align="center">
+          <template #default="{ row }">
+            <el-button link type="primary" @click="handleEdit(row)" class="action-link">编辑</el-button>
+            <el-button link type="danger" @click="handleDelete(row)" class="action-link">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
-    <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑分类' : '新增分类'" width="400px">
-      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
+    <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑分类' : '新增分类'" width="400px" class="classical-dialog">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px" class="category-form">
         <el-form-item label="分类名称" prop="name">
-          <el-input v-model="form.name" />
+          <el-input v-model="form.name" placeholder="请输入分类名称" />
         </el-form-item>
         <el-form-item label="排序">
           <el-input-number v-model="form.sort" :min="0" />
@@ -99,7 +106,7 @@ const handleSave = async () => {
 
 const handleDelete = async (row) => {
   try {
-    await ElMessageBox.confirm(`确定要删除分类「${row.name}」吗？`, '警告', { type: 'warning' })
+    await ElMessageBox.confirm(`确定要删除分类「${row.name}」吗？`, '删除确认', { type: 'warning' })
     await category.delete(row.id)
     ElMessage.success('删除成功')
     loadCategories()
@@ -116,34 +123,86 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.page-title {
-  margin-bottom: var(--spacing-lg);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-text-primary);
+.categories-container {
+  padding: var(--spacing-md);
 }
 
-.categories-container :deep(.el-card) {
+/* 页面标题 */
+.page-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font-family: var(--font-family-heading);
+  font-size: 26px;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: 4px;
+  position: relative;
+  display: inline-block;
+}
+
+.title-decoration {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, var(--color-primary), transparent);
+  margin-top: var(--spacing-sm);
+}
+
+/* 内容卡片 */
+.content-card {
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border-light);
+  background: #fff;
 }
 
-.categories-container :deep(.el-table th) {
-  background-color: var(--color-content-bg) !important;
-  font-weight: 600;
+.toolbar {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.add-btn {
+  font-family: var(--font-family);
+  letter-spacing: 2px;
+}
+
+/* 表格样式 */
+.classical-table :deep(.el-table__header th) {
+  background-color: var(--color-primary-bg) !important;
+  font-family: var(--font-family-heading);
+  font-weight: 500;
   color: var(--color-text-primary);
+  letter-spacing: 1px;
 }
 
-.categories-container :deep(.el-table td) {
-  border-bottom-color: var(--color-border-light);
+.classical-table :deep(.el-table__row) {
+  transition: background-color var(--transition-fast);
 }
 
-.categories-container :deep(.el-button) {
+.classical-table :deep(.el-table__row:hover) {
+  background-color: var(--color-primary-bg) !important;
+}
+
+.category-name {
+  font-family: var(--font-family);
+}
+
+.action-link {
+  font-family: var(--font-family);
   cursor: pointer;
-  transition: all var(--transition-fast);
 }
 
-.categories-container :deep(.el-button:hover) {
-  opacity: 0.85;
+/* 弹窗样式 */
+.classical-dialog :deep(.el-dialog__header) {
+  font-family: var(--font-family-heading);
+  letter-spacing: 3px;
+}
+
+.classical-dialog :deep(.el-dialog__body) {
+  padding: var(--spacing-lg);
+}
+
+.category-form :deep(.el-form-item__label) {
+  font-family: var(--font-family);
 }
 </style>

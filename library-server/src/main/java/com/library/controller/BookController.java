@@ -24,8 +24,10 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public Result<Page<Book>> getBooks(PageRequest request) {
-        Page<Book> page = bookService.getBooks(request);
+    public Result<Page<Book>> getBooks(PageRequest request, HttpServletRequest httpRequest) {
+        Integer role = (Integer) httpRequest.getAttribute("role");
+        boolean isAdmin = role != null && Constants.ROLE_ADMIN == role;
+        Page<Book> page = bookService.getBooks(request, isAdmin);
         return Result.success(page);
     }
 

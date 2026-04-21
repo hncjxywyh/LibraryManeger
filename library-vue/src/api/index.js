@@ -47,3 +47,7 @@ export const message = {
 export const userStats = {
   get: () => request.get('/user-stats')
 }
+
+export const stats = {
+  overview: () => request.get('/stats/overview')
+}

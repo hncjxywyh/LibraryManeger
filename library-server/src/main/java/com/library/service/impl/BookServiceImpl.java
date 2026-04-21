@@ -40,11 +40,15 @@ public class BookServiceImpl implements BookService {
     private final BookCategoryMapper bookCategoryMapper;
 
     @Override
-    public Page<Book> getBooks(PageRequest request) {
+    public Page<Book> getBooks(PageRequest request, boolean isAdmin) {
         Page<Book> page = new Page<>(request.getPageNum(), request.getPageSize());
 
         LambdaQueryWrapper<Book> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Book::getStatus, Constants.BOOK_STATUS_ON);
+
+        // 管理员看所有图书，非管理员只看上架的
+        if (!isAdmin) {
+            wrapper.eq(Book::getStatus, Constants.BOOK_STATUS_ON);
+        }
 
         if (StringUtils.hasText(request.getKeyword())) {
             wrapper.and(w -> w.like(Book::getTitle, request.getKeyword())
@@ -58,6 +62,9 @@ public class BookServiceImpl implements BookService {
 
         wrapper.orderByDesc(Book::getCreateTime);
         Page<Book> result = bookMapper.selectPage(page, wrapper);
+
+        // 填充分类名称
+        result.getRecords().forEach(book -> book.setCategoryName(getCategoryName(book.getCategoryId())));
 
         return result;
     }
