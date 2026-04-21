@@ -19,6 +19,7 @@ import java.util.Map;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final JwtBlacklist jwtBlacklist;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -32,22 +33,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = extractToken(request);
 
+        if (jwtBlacklist.contains(token)) {
+            sendUnauthorizedResponse(response, "Token已失效，请重新登录");
+            return;
+        }
+
         String[] allowedPaths = {"/api/auth/login", "/api/auth/register"};
         String path = request.getRequestURI();
         String method = request.getMethod();
         boolean isPublicGetBook = "GET".equals(method) && path.startsWith("/api/books");
+
         for (String allowedPath : allowedPaths) {
             if (path.startsWith(allowedPath)) {
                 filterChain.doFilter(request, response);
                 return;
             }
         }
-        if (isPublicGetBook) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         if (!StringUtils.hasText(token) || !jwtUtil.validateToken(token)) {
+            // 图书列表允许未登录访问，其他接口需要登录
+            if (isPublicGetBook) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             sendUnauthorizedResponse(response, "未登录或登录已过期");
             return;
         }

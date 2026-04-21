@@ -4,6 +4,7 @@ import com.library.common.Result;
 import com.library.dto.LoginRequest;
 import com.library.dto.RegisterRequest;
 import com.library.entity.User;
+import com.library.security.JwtBlacklist;
 import com.library.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtBlacklist jwtBlacklist;
 
     @PostMapping("/register")
     public Result<String> register(@Valid @RequestBody RegisterRequest request) {
@@ -35,7 +37,12 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public Result<Void> logout() {
+    public Result<Void> logout(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            String token = bearerToken.substring(7);
+            jwtBlacklist.add(token);
+        }
         return Result.success();
     }
 
